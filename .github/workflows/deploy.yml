@@ -17,9 +17,10 @@ jobs:
     
     - name: Check the code
       working-directory: ./functions
-      run: npm ci
-      run: npm run lint
-      run: npm run build
+      run: |
+       npm ci
+       npm run lint
+       npm run build
 
     - name: Deploy to Firebase
       uses: w9jds/firebase-action@master
