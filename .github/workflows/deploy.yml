@@ -1,0 +1,34 @@
+name: Firebase deploy
+on:
+ push:
+ branches: [main]
+
+jobs:
+  deploy:
+  runs-on: ubuntu-latest
+  steps:
+  - name: Checkout
+    uses: actions/checkout@master
+  
+  - name: Setup Node.js enviroment
+    user: actions/setup-node@master
+    with:
+      node-version: 14
+  
+  - name: Install dependencies
+    working-directory: ./functions
+    run: npm ci
+
+  - name : Check for linting erors
+    run: npm run lint
+    
+  - name: Build functions
+    run : npm build
+
+  - name: Deploy to Firebase
+    working-directory: ./
+    uses: w9jds/firebase-action@master
+    with:
+      args: deploy
+    env:
+      FIRBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}
