@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+      match /usernames/{username}{
+        allow read;
+        allow create: if isValidUsername(username);
+      }
+      match /users/{userId}{
+        allow create: if canCreateNewProfile(userId);
+        allow update: if isOwner() && dontSpoofUsername();
+        allow read;
+        match /private/data {
+          allow create: if canCreateNewProfile(userId);
+          allow update: if isOwner();
+          allow read: if request.auth.uid == userId;
+        }
+      }
+    }
+
+    //Functions
+    function isLoggedIn(){
+      return request.auth.uid != null;
+    }
+
+    function isOwner(){
+      let isOwner = request.auth.uid == resource.data.uid;
+      return isOwner;
+    }
+
+    function canCreateNewProfile(userId){
+      let validUid = request.resource.data.uid == request.auth.uid;
+      let validDocLocation = request.auth.uid == userId;
+      let hasValidFields = request.resource.data.keys().hasOnly(["uid", "displayName", "photoURL"]) || request.resource.data.keys().hasOnly(["uid"]);
+      return isLoggedIn() && validUid && validDocLocation && hasValidFields;
+    }
+
+    function dontSpoofUsername(){
+      let doesntSpoofUsername = request.resource.data.keys().hasOnly(["uid", "displayName", "photoURL"]);
+      return !doesntSpoofUsername;
+    }
+
+    function isValidUsername(username) {
+      let isOwner = request.auth.uid == request.resource.data.uid;
+      let isValidLength = username.size() >= 5 && username.size() <=15;
+      let isValidUserDoc = getAfter(/database/$(database)/documents/users/$(request.auth.uid)).data.username == username;
+
+      return isOwner && isValidLength && isValidUserDoc;
+    }
+
+    //Boilerplate
+  }  
+}
