@@ -1,7 +1,7 @@
 name: Node Continous Integration
 
 on:
- pull_rquest:
+ pull_request:
   branches: [main]
 
 
