@@ -15,18 +15,11 @@ jobs:
       with:
         node-version: 14
     
-    - name: Install dependencies
+    - name: Check the code
       working-directory: ./functions
       run: npm ci
-
-    - name : Check for linting erors
-      working-directory: ./functions 
       run: npm run lint
-      
-    - name: Build functions
-      working-directory: ./functions
-      run : npm build
-      working-directory: ./
+      run: npm run build
 
     - name: Deploy to Firebase
       uses: w9jds/firebase-action@master
