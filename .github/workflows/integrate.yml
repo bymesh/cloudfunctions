@@ -9,10 +9,17 @@ jobs:
   test_pull_request:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        working-directory: ./functions
-      - uses: actions/setup-node@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      -name: Setup Node.js enviroment
+        uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: npm ci
-      - run : npm build
+      
+      - name: Install dependencies
+        working-directory: ./functions
+        run: npm ci
+      
+      - name: Build functions
+        run : npm build
