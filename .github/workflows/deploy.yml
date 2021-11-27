@@ -24,9 +24,9 @@ jobs:
       
     - name: Build functions
       run : npm build
+      working-directory: ./
 
     - name: Deploy to Firebase
-      working-directory: ./
       uses: w9jds/firebase-action@master
       with:
         args: deploy
