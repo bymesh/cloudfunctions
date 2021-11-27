@@ -11,9 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
+      working-directory: ./functions
         with:
           node-version: 12
-      - run: cd functions
       - run: npm ci
       - run: npm run lint
       - run: npm run build
