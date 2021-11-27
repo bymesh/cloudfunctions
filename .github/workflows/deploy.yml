@@ -11,7 +11,7 @@ jobs:
       uses: actions/checkout@master
     
     - name: Setup Node.js enviroment
-      user: actions/setup-node@master
+      uses: actions/setup-node@master
       with:
         node-version: 14
     
