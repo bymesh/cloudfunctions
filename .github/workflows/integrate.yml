@@ -1,4 +1,4 @@
-name: Node Continous Integration
+name: Node.js CI
 
 on:
  pull_request:
@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        working-directory: ./functions
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-        working-directory: ./functions
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run build
+      run : |
+          npm ci
+          npm run build
