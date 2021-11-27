@@ -21,5 +21,8 @@ jobs:
       working-directory: ./functions
       run: npm ci
     
+    - name : Check for linting erors
+      run: npm run lint
+    
     - name: Build functions
       run : npm build
