@@ -29,7 +29,6 @@ export const createUsername = functions
           const usernameBatch = db.batch();
           usernameBatch.update(userRef, username);
           usernameBatch.update(userPrivateRef, username);
-          usernameRef.set({uid: context.auth?.uid});
           usernameBatch.commit();
           return {
             message: 'username/succesful',
