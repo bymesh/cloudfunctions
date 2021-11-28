@@ -1,3 +1,3 @@
 export {createUserRecord} from './auth';
 export {createUsername} from './username';
-console.log("fucking break plspls fuckkkkkkkkkkkk");
+console.log('fucking break plspls fuckkkkkkkkkkkk');
