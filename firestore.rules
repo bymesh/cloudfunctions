@@ -11,6 +11,10 @@ service cloud.firestore {
         allow create: if canCreateNewProfile(userId);
         allow update: if isOwner() && dontSpoofUsername();
         allow read;
+        match /schoolmesh/profile {
+          allow read;
+          allow write: if request.auth.uid == userId;
+        }
         match /private/data {
           allow create: if canCreateNewProfile(userId);
           allow update: if isOwner();
