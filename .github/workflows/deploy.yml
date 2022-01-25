@@ -14,13 +14,6 @@ jobs:
       uses: actions/setup-node@master
       with:
         node-version: 14
-    
-    - name: Check the code
-      working-directory: ./functions
-      run: |
-       npm ci
-       npm run lint:fix
-       npm run build
 
     - name: Deploy to Firebase
       uses: w9jds/firebase-action@master
