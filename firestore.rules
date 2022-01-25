@@ -2,24 +2,25 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /{document=**} {
-      allow read, write: if false;
+      
+      allow read, write: if false; // Top level disallow se we dont get errors
+
       match /usernames/{username}{
         allow read;
         allow create: if isValidUsername(username);
       }
+
       match /users/{userId}{
         allow create: if canCreateNewProfile(userId);
         allow update: if isOwner() && dontSpoofUsername();
         allow read;
-        match /schoolmesh/profile {
-          allow read;
-          allow write: if request.auth.uid == userId;
-        }
+
         match /private/data {
           allow create: if canCreateNewProfile(userId);
           allow update: if isOwner();
           allow read: if request.auth.uid == userId;
         }
+
       }
     }
 
@@ -36,8 +37,8 @@ service cloud.firestore {
     function canCreateNewProfile(userId){
       let validUid = request.resource.data.uid == request.auth.uid;
       let validDocLocation = request.auth.uid == userId;
-      let hasValidFields = request.resource.data.keys().hasOnly(["uid", "displayName", "photoURL"]) || request.resource.data.keys().hasOnly(["uid"]);
-      return isLoggedIn() && validUid && validDocLocation && hasValidFields;
+      let hasValidFields = request.resource.data.keys().hasOnly(["uid", "displayName", "photoURL", "username"]);
+      return isLoggedIn() && validUid && validDocLocation && hasValidFields && isValidUsername(request.resource.data.username);
     }
 
     function dontSpoofUsername(){
