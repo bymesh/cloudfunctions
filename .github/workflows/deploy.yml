@@ -1,23 +1,23 @@
 name: Firebase deploy
 on:
- push:
-  branches: [main]
+  push:
+    branches: [main]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@master
-    
-    - name: Setup Node.js enviroment
-      uses: actions/setup-node@master
-      with:
-        node-version: 14
+      - name: Checkout
+        uses: actions/checkout@master
 
-    - name: Deploy to Firebase
-      uses: w9jds/firebase-action@master
-      with:
-        args: deploy
-      env:
-        FIREBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}
+      - name: Setup Node.js enviroment
+        uses: actions/setup-node@master
+        with:
+          node-version: 14
+
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy
+        env:
+          FIREBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}

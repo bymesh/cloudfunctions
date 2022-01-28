@@ -1,11 +1,34 @@
-import {loadFirestoreRuls, initializeTestApp} from "@firebase/rules-unit-testing"
-import { readFileSync } from "fs"
+const {
+	loadFirestoreRules,
+	initializeTestApp,
+	initializeAdminApp,
+	clearFirestoreData
+} = require('@firebase/testing');
+const { readFileSync } = require('fs');
 
-export const setup = async (auth,data) => {
-  const projectId = "mesh-dev-55129"
-  const app = initializeTestApp({projectId, auth})
-}
+const projectId = 'mesh-dev-55129';
 
-export const teardown = async () => {
-  
-}
+module.exports.setup = async (auth) => {
+	const app = initializeTestApp({
+		projectId,
+		auth
+	});
+	await loadFirestoreRules({
+		projectId: projectId,
+		rules: readFileSync('firestore.rules', 'utf-8')
+	});
+
+	return app.firestore();
+};
+
+module.exports.adminSetup = async () => {
+	const admin = initializeAdminApp({
+		projectId
+	});
+
+	return admin.firestore();
+};
+
+module.exports.teardown = async () => {
+	await clearFirestoreData({ projectId: projectId });
+};
